@@ -54,6 +54,10 @@ typedef struct _BlockPos {
 
 		return (uint64) sqrt(dX * dX + dY * dY + dZ * dZ);
 	}
+	uint64 manhdist(_BlockPos other)
+	{
+		return abs(other.x - x) + abs(other.y - y) + abs(other.z - z);
+	}
 	std::string toString()
 	{
 		return "(" + std::to_string(x) + " | " + std::to_string(y) + " | " + std::to_string(z) + ")";
@@ -64,6 +68,14 @@ typedef struct _BlockPos {
 	}
 
 } BlockPos;
+namespace std {
+	template<>
+	struct hash<BlockPos> {
+		size_t operator()(const BlockPos& obj) const {
+			return 31 * (31 * (31 + obj.x) + obj.y) + obj.z;
+		}
+	};
+}
 
 typedef struct _Dimension {
 	uint64 width;

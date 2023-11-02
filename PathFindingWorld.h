@@ -13,6 +13,7 @@ public:
 	void addChunk(ChunkPos pos, PathFindingChunk* chunk);
 	void removeChunk(ChunkPos pos);
 	PathFindingBlockState getBlockState(BlockPos pos);
+	void setBlockState(BlockPos pos, PathFindingBlockState newState);
 
 private:
 	Dimension reservation;

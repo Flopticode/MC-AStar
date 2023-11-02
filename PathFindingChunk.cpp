@@ -38,7 +38,7 @@ PathFindingChunk::PathFindingChunk(BlockPos start, BlockPos end, PathFindingBloc
 	:data(data),
 	start(BlockPos(min(start.x, end.x), min(start.y, end.y), min(start.z, end.z))),
 	end(BlockPos(max(start.x, end.x), max(start.y, end.y), max(start.z, end.z))),
-	size(Dimension(end.x - start.x, end.y - start.y, end.z - start.z))
+	size(Dimension(end.x - start.x + 1, end.y - start.y + 1, end.z - start.z + 1))
 {
 
 }

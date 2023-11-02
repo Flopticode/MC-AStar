@@ -45,6 +45,10 @@ PathFindingBlockState PathFindingWorld::getBlockState(BlockPos pos)
 		return PFBSUtils::createState(false, false, 255, true);
 	return chunk->getBlockState(pos);
 }
+void PathFindingWorld::setBlockState(BlockPos pos, PathFindingBlockState newState)
+{
+	getChunkAt(pos)->setBlockState(pos, newState);
+}
 
 PathFindingChunk* PathFindingWorld::getChunkAt(BlockPos pos)
 {

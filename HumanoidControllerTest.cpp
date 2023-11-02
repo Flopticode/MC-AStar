@@ -6,14 +6,29 @@
 #include <Windows.h>
 #include <chrono>
 #include "time.h"
+#include "WorldRenderer.h"
+
+#define CHUNK_HEIGHT 1
+#define CHUNK_WIDTH 16
+#define CHUNK_DEPTH 16
 
 PathFindingBlockState* randomData()
 {
-    auto data = new PathFindingBlockState[16 * 16 * 16];
-    for (uint8 x = 0; x < 16; x++)
-        for (uint8 y = 0; y < 16; y++)
-            for (uint8 z = 0; z < 16; z++)
-                data[z * 16 * 16 + y * 16 + x] = PFBSUtils::createState(true, true, rand()%10 + 1, false);
+    auto data = new PathFindingBlockState[CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_DEPTH];
+    for (uint8 x = 0; x < CHUNK_WIDTH; x++)
+    {
+        for (uint8 y = 0; y < CHUNK_HEIGHT; y++)
+        {
+            for (uint8 z = 0; z < CHUNK_DEPTH; z++)
+            {
+                uint32 index =
+                    z * CHUNK_WIDTH * CHUNK_HEIGHT
+                    + y * CHUNK_WIDTH
+                    + x;
+                data[index] = PFBSUtils::createState(true, true, rand()%10 + 1, false);
+            }
+        }
+    }
     return data;
 }
 int main()
@@ -21,22 +36,27 @@ int main()
     srand(0);
 
     auto world = new PathFindingWorld();
-    auto worldLen = 10;
+    auto worldLen = 3;
     for (int i = 0; i < worldLen; i++)
     {
         auto chunk = new PathFindingChunk(
-            BlockPos(0, 0, i*16),
-            BlockPos(15, 15, (i + 1) * 16 - 1),
+            BlockPos(0, 0, i*CHUNK_DEPTH),
+            BlockPos(
+                CHUNK_WIDTH - 1,
+                CHUNK_HEIGHT - 1,
+                ((i + 1) * CHUNK_DEPTH) - 1),
             randomData());
         world->addChunk(ChunkPos(0, 0, i), chunk);
     }
+    WorldRenderer* renderer = new WorldRenderer(world);
+
     std::chrono::milliseconds duration;
     uint32 times = 0;
     auto start = BlockPos(0, 0, 0);
-    auto end = BlockPos(0, 0, worldLen * 16 - 1);
+    auto end = BlockPos(0, 0, worldLen * CHUNK_DEPTH - 1);
 
     
-    int a;
+    std::string a;
     std::cin >> a;
     std::cout << "Starting pathfinding." << std::endl;
     Path* lastPath = nullptr;
@@ -45,7 +65,7 @@ int main()
     auto ts2 = std::chrono::high_resolution_clock::now();
     do
     {
-        auto path = AStar::calculatePath(world, start, end);
+        auto path = AStar::calculatePath(renderer, world, start, end);
         delete lastPath;
         lastPath = path;
         times++;

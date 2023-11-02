@@ -8,9 +8,10 @@
 #include <iostream>
 #include <map>
 #include "HashMap.h"
+#include "Heap.h"
 
 #define BLOCK_QUANT 900000
-
+/*
 class PriorityQueue
 {
 private:
@@ -24,7 +25,7 @@ public:
 	{
 		PrioQueueEntry* entry = newEntry(node, prio);
 		entryHeap[0][size()-1] = *entry;
-		entryMap.addNode(node->pos, entry);
+		entryMap[node->pos] = entry; //entryMap.addNode(node->pos, entry);
 		std::push_heap(getHeapEntry(0), getHeapEntry(size()), &compareEntries);
 	}
 	void update(Node* node, uint32 newPrio)
@@ -33,51 +34,21 @@ public:
 		getEntry(index)->priority = newPrio;
 		std::push_heap(getHeapEntry(0), getHeapEntry(index + 1), &compareEntries);
 	}
-	int indexOf(PrioQueueEntry* entry)
-	{
-		int index = 1;
-		while (true)
-		{
-			if (getEntry(index) == entry)
-			{
-				return index;
-			}
-			if (getEntry(index) > entry)
-			{
-				index = index * 2 + 1;
-			}
-			else
-			{
-				index = index * 2;
-			}
-
-			if (index >= size())
-				return -1;
-		}
-	}
-	uint32 indexOf(Node* node)
-	{
-		PrioQueueEntry* entry = entryMap.get(node->pos);
-		auto index = indexOf(entry);
-		if (index == -1)
-			throw std::invalid_argument("This node is not in this heap");
-		return index;
-	}
 	Node* pop()
 	{
 		if (size() == 0)
 			return nullptr;
 
-		auto frontNode = getHeapEntry(0)->node;
-		entryMap.remove(frontNode->pos);
-		std::pop_heap(getHeapEntry(0), getHeapEntry(size()), &compareEntries);
+		auto frontNode = heap.pop()->node;
+		//entryMap.remove(frontNode->pos);
+		entryMap.erase(frontNode->pos);
 		numentries--;
 
 		return frontNode;
 	}
 	bool contains(Node* node)
 	{
-		return entryMap.get(node->pos) != nullptr;
+		return entryMap.count(node->pos) > 0;//entryMap.get(node->pos) != nullptr;
 	}
 	bool empty()
 	{
@@ -94,8 +65,9 @@ public:
 	}
 
 	PriorityQueue(size_t initialSize)
+		:heap(Heap(maxnumEntries))
 	{
-		entryMap.clearAndSetNumBuckets(initialSize);
+		//entryMap.clearAndSetNumBuckets(initialSize);
 
 		nodes = std::vector<Node*>();
 		nodes.push_back(new Node[BLOCK_QUANT]());
@@ -148,13 +120,11 @@ public:
 	{
 		return &entries[index / BLOCK_QUANT][index % BLOCK_QUANT];
 	}
-	PrioQueueEntry* getHeapEntry(size_t index)
-	{
-		return &entryHeap[0][index];
-	}
 
 private:
-	HashMap entryMap = HashMap();
+	//HashMap entryMap = HashMap();
+	std::map<BlockPos, PrioQueueEntry*> entryMap;
+	Heap heap;
 
 	size_t numnodes = 0;
 	size_t maxnumNodes;
@@ -166,3 +136,4 @@ private:
 
 	PrioQueueEntry (*entryHeap)[BLOCK_QUANT] = new PrioQueueEntry[1][BLOCK_QUANT];
 };
+*/

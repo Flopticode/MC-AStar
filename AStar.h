@@ -2,8 +2,9 @@
 
 #include "PathFindingWorld.h"
 #include "Path.h"
+#include "WorldRenderer.h"
 
 namespace AStar
 {
-	Path* calculatePath(PathFindingWorld* world, BlockPos start, BlockPos end);
+	Path* calculatePath(WorldRenderer* wr, PathFindingWorld* world, BlockPos start, BlockPos end);
 }

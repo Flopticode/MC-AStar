@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <list>
+#include <unordered_map>
 #include "MinecraftTypes.h"
 
 typedef struct _Node
@@ -23,99 +24,63 @@ typedef struct _Node
 
 	}
 
-	bool operator==(_Node other)
+	bool operator==(const _Node& other)
 	{
 		return other.pos == pos;
 	}
 
 } Node;
 
-typedef struct _PrioQueueEntry
-{
-	Node* node;
-	uint32 priority;
-
-	_PrioQueueEntry(Node* node, uint32 priority)
-		:node(node), priority(priority)
-	{
-
-	}
-	_PrioQueueEntry()
-		:node(nullptr), priority(0)
-	{
-
-	}
-
-	bool operator<(_PrioQueueEntry other)
-	{
-		if (other.priority < priority)
-			return true;
-		else if (other.priority > priority)
-			return false;
-		return other.node->id < node->id;
-	}
-	bool operator>(_PrioQueueEntry other)
-	{
-		if (other.priority > priority)
-			return true;
-		else if (other.priority < priority)
-			return false;
-		return other.node->id > node->id;
-	}
-	bool operator==(_PrioQueueEntry other)
-	{
-		return node == other.node && priority == other.priority;
-	}
-} PrioQueueEntry;
-
 class HashMap
 {
 public:
-	void addNode(BlockPos pos, PrioQueueEntry* entry)
+	HashMap(size_t numBuckets)
 	{
-		buckets[pos.hash() % buckets.size()].push_back(entry);
-		numElements++;
+		clearAndSetNumBuckets(numBuckets);
 	}
-	PrioQueueEntry* get(BlockPos pos)
+	void addNode(Node* node, uint32 priority)
 	{
-		auto bucket = buckets[pos.hash() % buckets.size()];
-		auto endIter = bucket.end();
-		auto iter = bucket.begin();
-		while (iter != endIter)
-		{
-			PrioQueueEntry* curEntry = *iter;
-			if (curEntry->node->pos == pos)
-				return curEntry;
-			iter++;
-		}
-		return nullptr;
+		priorities[node->pos] = priority;
+		buckets[priority % buckets.size()].push_back(node);
+		buckets[priority % buckets.size()].sort([this](Node* n1, Node* n2) {
+			return priorities[n1->pos] < priorities[n2->pos];
+		}); // TODO this is inefficient. change this.
 	}
-	void remove(BlockPos pos)
+	void update(Node* node, uint32 newPriority)
 	{
-		auto bucket = buckets[pos.hash() % buckets.size()];
-		auto endIter = bucket.end();
-		auto iter = bucket.begin();
-		while (iter != endIter)
+		uint32 oldPrio = priorities[node->pos];
+		if (oldPrio == newPriority)
+			return;
+
+		buckets[oldPrio % buckets.size()].remove(node);
+		priorities[node->pos] = newPriority;
+		buckets[newPriority % buckets.size()].push_back(node);
+		buckets[newPriority % buckets.size()].sort([this](Node* n1, Node* n2) {
+			return priorities[n1->pos] < priorities[n2->pos];
+		}); // TODO this is inefficient. change this.
+	}
+	bool contains(Node* node)
+	{
+		return priorities.count(node->pos) > 0;
+	}
+	Node* pop()
+	{
+		for (auto& bucket : buckets)
 		{
-			PrioQueueEntry* curEntry = *iter;
-			if (curEntry->node->pos == pos)
+			if (!bucket.empty())
 			{
-				bucket.erase(iter);
-				numElements--;
-				return;
+				auto ret = bucket.front();
+				bucket.pop_front();
+				priorities.erase(ret->pos);
+				return ret;
 			}
-			iter++;
 		}
-		throw std::invalid_argument("No such position.");
 	}
 	void clearAndSetNumBuckets(size_t num)
 	{
 		buckets.clear();
 		buckets.reserve(num);
-		for (size_t i = 0; i < num; i++)
-		{
-			buckets.push_back(std::list<PrioQueueEntry*>());
-		}
+		buckets.resize(num);
 	}
 	void clear()
 	{
@@ -124,13 +89,18 @@ public:
 		{
 			buckets[numBuckets].clear();
 		}
+		priorities.clear();
 	}
 	size_t size()
 	{
-		return numElements;
+		return priorities.size();
+	}
+	bool empty()
+	{
+		return size() == 0;
 	}
 
 private:
-	std::vector<std::list<PrioQueueEntry*>> buckets;
-	size_t numElements = 0;
+	std::vector<std::list<Node*>> buckets;
+	std::unordered_map<BlockPos, uint32> priorities;
 };
