@@ -2,7 +2,7 @@
 #include "PathFindingWorld.h"
 #include "AStar.h"
 #include "PathFindingBlockStateUtils.h"
-#include "PrioQueue.h"
+#include "NodePrioQueue.h"
 #include <Windows.h>
 #include <chrono>
 #include "time.h"

@@ -1,11 +1,11 @@
 #include "AStar.h"
 #include "PathFindingBlockStateUtils.h"
-#include "PrioQueue.h"
 #include <queue>
 #include <iostream>
 #include <chrono>
-#include "HashList.h"
+#include "BlockPosHashList.h"
 #include "WorldRenderer.h"
+#include "NodePrioQueue.h"
 #include <unordered_set>
 
 Path* makePath(Node* node);
@@ -16,11 +16,14 @@ uint32 getCost(PathFindingBlockState state)
 		PFBSUtils::getBreakDelay(state);
 }
 
-void expandNode(WorldRenderer* wr, uint32& idCntr, BlockPos start, BlockPos end, PathFindingWorld* world,
-	HashMap& openlist,
-	std::unordered_set<BlockPos>& closedlist, Node* currentNode)
+void expandNode(WorldRenderer* wr, uint32& idCntr, BlockPos start, BlockPos end,
+	PathFindingWorld* world,
+	NodePrioQueue& openlist, std::unordered_set<BlockPos>& closedlist, Node* currentNode)
 {
 	BlockPos curPos = currentNode->pos;
+	
+	// TODO feels inefficient to always test all the neighbors.
+	// is there a more efficient way?
 	BlockPos successorPositions[] = {
 		BlockPos(curPos.x,	curPos.y + 1, curPos.z),
 		BlockPos(curPos.x,	curPos.y - 1, curPos.z),
@@ -57,7 +60,7 @@ void expandNode(WorldRenderer* wr, uint32& idCntr, BlockPos start, BlockPos end,
 
 		successor->predecessor = currentNode;
 		successor->gCost = tentative_g;
-
+		0xFFFFFFFF;
 		uint32 hCost = successor->pos.manhdist(end);
 		uint32 fCost = (uint32)(tentative_g + hCost);
 
@@ -83,7 +86,7 @@ Path* AStar::calculatePath(WorldRenderer* wr, PathFindingWorld* world, BlockPos 
 {
 	auto initialSize = end.dist(start) * 80;
 
-	auto openlist = HashMap(50);
+	auto openlist = NodePrioQueue(50);
 	auto closedlist = std::unordered_set<BlockPos>();
 
 	uint32 idCntr = 0;
