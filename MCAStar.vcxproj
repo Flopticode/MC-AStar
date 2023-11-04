@@ -24,6 +24,7 @@
     <ClCompile Include="GraphicsTypes.cpp" />
     <ClCompile Include="MCAStarTest.cpp" />
     <ClCompile Include="MinecraftTypes.cpp" />
+    <ClCompile Include="NodeHeap.cpp" />
     <ClCompile Include="NodePrioQueue.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="PathFindingBlockStateUtils.cpp" />
@@ -36,6 +37,7 @@
     <ClInclude Include="AStar.h" />
     <ClInclude Include="GraphicsTypes.h" />
     <ClInclude Include="BlockPosHashList.h" />
+    <ClInclude Include="NodeHeap.h" />
     <ClInclude Include="NodePrioQueue.h" />
     <ClInclude Include="MinecraftTypes.h" />
     <ClInclude Include="Path.h" />

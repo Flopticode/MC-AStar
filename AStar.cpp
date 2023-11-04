@@ -6,6 +6,7 @@
 #include "BlockPosHashList.h"
 #include "WorldRenderer.h"
 #include "NodePrioQueue.h"
+#include "NodeHeap.h"
 #include <unordered_set>
 
 Path* makePath(Node* node);
@@ -16,7 +17,7 @@ uint32 getCost(PathFindingBlockState state)
 		PFBSUtils::getBreakDelay(state);
 }
 
-void expandNode(WorldRenderer* wr, uint32& idCntr, BlockPos start, BlockPos end,
+void expandNode(NodeHeap& nodeHeap, WorldRenderer* wr, uint32& idCntr, BlockPos start, BlockPos end,
 	PathFindingWorld* world,
 	NodePrioQueue& openlist, std::unordered_set<BlockPos>& closedlist, Node* currentNode)
 {
@@ -42,7 +43,7 @@ void expandNode(WorldRenderer* wr, uint32& idCntr, BlockPos start, BlockPos end,
 		if (closedlist.count(successorPos) > 0)
 			continue;
 		
-		auto successor = new Node(idCntr++,
+		auto successor = nodeHeap.newNode(idCntr++,
 			successorPos,
 			world->getBlockState(successorPos),
 			nullptr,
@@ -84,14 +85,18 @@ void expandNode(WorldRenderer* wr, uint32& idCntr, BlockPos start, BlockPos end,
 
 Path* AStar::calculatePath(WorldRenderer* wr, PathFindingWorld* world, BlockPos start, BlockPos end)
 {
+	/* The higher, the faster, but your memory gets eaten */
 	auto initialSize = end.dist(start) * 80;
 
+	NodeHeap nodeHeap = NodeHeap(initialSize);
 	auto openlist = NodePrioQueue(50);
 	auto closedlist = std::unordered_set<BlockPos>();
 
 	uint32 idCntr = 0;
 
-	openlist.addNode(new Node(idCntr++, start, world->getBlockState(start), nullptr, 0), 0);
+	openlist.addNode(nodeHeap.newNode(idCntr++, start, world->getBlockState(start), nullptr, 0), 0);
+
+	Path* path = nullptr;
 
 	do
 	{
@@ -113,12 +118,13 @@ Path* AStar::calculatePath(WorldRenderer* wr, PathFindingWorld* world, BlockPos 
 		if (curNode->pos == end)
 		{
 			std::cout << closedlist.size() << " nodes were evaluated, " << openlist.size() << " were open." << std::endl;
-			return makePath(curNode);
+			path = makePath(curNode);
+			break;
 		}
 
 		closedlist.insert(curNode->pos);
 
-		expandNode(wr, idCntr, start, end, world, openlist, closedlist, curNode);
+		expandNode(nodeHeap, wr, idCntr, start, end, world, openlist, closedlist, curNode);
 
 #ifdef DEBUG_RENDERING
 		/* Just for debugging */
@@ -138,8 +144,8 @@ Path* AStar::calculatePath(WorldRenderer* wr, PathFindingWorld* world, BlockPos 
 #endif
 
 	} while (!openlist.empty());
-	
-	return nullptr;
+
+	return path;
 }
 
 Path* makePath(Node* node)

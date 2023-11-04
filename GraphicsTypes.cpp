@@ -30,7 +30,7 @@ uint8 _Bitmap::getBitsPerPixel()
 }
 _Bitmap* _Bitmap::create(uint16 width, uint16 height)
 {
-	return new _Bitmap(new uint8[width * height * getBitsPerPixel()], width, height);
+	return new _Bitmap(new uint8[(uint32)width * height * getBitsPerPixel()], width, height);
 }
 void _Bitmap::forEachPixel(std::function<Color(Point)> func)
 {

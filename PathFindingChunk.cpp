@@ -42,6 +42,10 @@ PathFindingChunk::PathFindingChunk(BlockPos start, BlockPos end, PathFindingBloc
 {
 
 }
+PathFindingChunk::~PathFindingChunk()
+{
+	delete[] data;
+}
 
 uint64 PathFindingChunk::blockPosToArrayIndex(BlockPos pos)
 {

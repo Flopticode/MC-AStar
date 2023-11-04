@@ -12,6 +12,7 @@ public:
 	void setBlockState(BlockPos pos, PathFindingBlockState state);
 
 	PathFindingChunk(BlockPos start, BlockPos end, PathFindingBlockState* data);
+	~PathFindingChunk();
 
 private:
 	BlockPos start;

@@ -10,6 +10,11 @@ PathFindingWorld::PathFindingWorld()
 {
 	chunks.resize(reservation.width * reservation.height * reservation.depth);
 }
+PathFindingWorld::~PathFindingWorld()
+{
+	for (auto& chunk : chunks)
+		delete chunk;
+}
 
 void PathFindingWorld::addChunk(ChunkPos pos, PathFindingChunk* chunk)
 {

@@ -9,6 +9,7 @@ public:
 	static constexpr uint8 WORLD_CHUNK_HEIGHT = 24;
 
 	PathFindingWorld();
+	~PathFindingWorld();
 
 	void addChunk(ChunkPos pos, PathFindingChunk* chunk);
 	void removeChunk(ChunkPos pos);
