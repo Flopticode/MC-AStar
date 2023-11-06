@@ -19,6 +19,9 @@ _Node::_Node(uint32 id, BlockPos pos, PathFindingBlockState state, _Node* predec
 
 NodePrioQueue::NodePrioQueue(size_t numBuckets)
 {
+	if (numBuckets == 0)
+		numBuckets = 1;
+
 	clearAndSetNumBuckets(numBuckets);
 }
 
@@ -66,6 +69,9 @@ Node* NodePrioQueue::pop()
 }
 void NodePrioQueue::clearAndSetNumBuckets(size_t num)
 {
+	if (num == 0)
+		num = 1;
+
 	buckets.clear();
 	buckets.reserve(num);
 	buckets.resize(num);

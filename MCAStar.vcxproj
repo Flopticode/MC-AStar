@@ -21,7 +21,9 @@
   <ItemGroup>
     <ClCompile Include="AStar.cpp" />
     <ClCompile Include="BlockPosHashList.cpp" />
+    <ClCompile Include="DebugDefs.h" />
     <ClCompile Include="GraphicsTypes.cpp" />
+    <ClCompile Include="MCAStar.cpp" />
     <ClCompile Include="MCAStarTest.cpp" />
     <ClCompile Include="MinecraftTypes.cpp" />
     <ClCompile Include="NodeHeap.cpp" />
@@ -37,6 +39,7 @@
     <ClInclude Include="AStar.h" />
     <ClInclude Include="GraphicsTypes.h" />
     <ClInclude Include="BlockPosHashList.h" />
+    <ClInclude Include="MCAStar.h" />
     <ClInclude Include="NodeHeap.h" />
     <ClInclude Include="NodePrioQueue.h" />
     <ClInclude Include="MinecraftTypes.h" />
@@ -70,7 +73,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -139,6 +142,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

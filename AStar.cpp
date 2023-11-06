@@ -8,6 +8,7 @@
 #include "NodePrioQueue.h"
 #include "NodeHeap.h"
 #include <unordered_set>
+#include "DebugDefs.h"
 
 Path* makePath(Node* node);
 
@@ -36,8 +37,6 @@ void expandNode(NodeHeap& nodeHeap, WorldRenderer* wr, uint32& idCntr, BlockPos 
 
 	for (uint8 i = 0; i < 6; i++)
 	{
-		
-
 		BlockPos successorPos = successorPositions[i];
 
 		if (closedlist.count(successorPos) > 0)
@@ -61,7 +60,6 @@ void expandNode(NodeHeap& nodeHeap, WorldRenderer* wr, uint32& idCntr, BlockPos 
 
 		successor->predecessor = currentNode;
 		successor->gCost = tentative_g;
-		0xFFFFFFFF;
 		uint32 hCost = successor->pos.manhdist(end);
 		uint32 fCost = (uint32)(tentative_g + hCost);
 
@@ -87,9 +85,8 @@ Path* AStar::calculatePath(WorldRenderer* wr, PathFindingWorld* world, BlockPos 
 {
 	/* The higher, the faster, but your memory gets eaten */
 	auto initialSize = end.dist(start) * 80;
-
 	NodeHeap nodeHeap = NodeHeap(initialSize);
-	auto openlist = NodePrioQueue(50);
+	auto openlist = NodePrioQueue(initialSize);
 	auto closedlist = std::unordered_set<BlockPos>();
 
 	uint32 idCntr = 0;
@@ -100,7 +97,6 @@ Path* AStar::calculatePath(WorldRenderer* wr, PathFindingWorld* world, BlockPos 
 
 	do
 	{
-		
 		auto curNode = openlist.pop();
 
 #ifdef DEBUG_RENDERING
@@ -117,7 +113,7 @@ Path* AStar::calculatePath(WorldRenderer* wr, PathFindingWorld* world, BlockPos 
 		
 		if (curNode->pos == end)
 		{
-			std::cout << closedlist.size() << " nodes were evaluated, " << openlist.size() << " were open." << std::endl;
+			//std::cout << closedlist.size() << " nodes were evaluated, " << openlist.size() << " were open." << std::endl;
 			path = makePath(curNode);
 			break;
 		}
@@ -125,7 +121,6 @@ Path* AStar::calculatePath(WorldRenderer* wr, PathFindingWorld* world, BlockPos 
 		closedlist.insert(curNode->pos);
 
 		expandNode(nodeHeap, wr, idCntr, start, end, world, openlist, closedlist, curNode);
-
 #ifdef DEBUG_RENDERING
 		/* Just for debugging */
 		stateBefore = world->getBlockState(curNode->pos);

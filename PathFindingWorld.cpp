@@ -3,12 +3,16 @@
 #include <string>
 #include "PathFindingBlockStateUtils.h"
 #include <algorithm>
+#include <iostream>
 
 PathFindingWorld::PathFindingWorld()
 	:reservation(10, WORLD_CHUNK_HEIGHT, 10),
 	chunks()
 {
+	size_t sizeBefore = chunks.size();
 	chunks.resize(reservation.width * reservation.height * reservation.depth);
+	for (uint32 i = sizeBefore; i < chunks.size(); i++)
+		chunks[i] = 0;
 }
 PathFindingWorld::~PathFindingWorld()
 {
@@ -16,6 +20,10 @@ PathFindingWorld::~PathFindingWorld()
 		delete chunk;
 }
 
+bool PathFindingWorld::isChunk(ChunkPos pos)
+{
+	return chunks[chunkPosToArrayPos(pos)] != nullptr;
+}
 void PathFindingWorld::addChunk(ChunkPos pos, PathFindingChunk* chunk)
 {
 	auto arrPos = chunkPosToArrayPos(pos);
@@ -26,7 +34,11 @@ void PathFindingWorld::addChunk(ChunkPos pos, PathFindingChunk* chunk)
 		reservation.width = std::max((int)reservation.width, pos.x + 10);
 		reservation.height = std::max((int)reservation.height, pos.y + 10);
 		reservation.depth = std::max((int)reservation.depth, pos.z + 10);
+
+		size_t sizeBefore = chunks.size();
 		chunks.resize(reservation.width * reservation.height * reservation.depth);
+		for (uint32 i = sizeBefore; i < chunks.size(); i++)
+			chunks[i] = nullptr;
 	}
 
 	if (arrPos < chunks.size() && chunks[arrPos] != nullptr)

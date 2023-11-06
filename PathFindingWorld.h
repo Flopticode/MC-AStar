@@ -12,6 +12,7 @@ public:
 	~PathFindingWorld();
 
 	void addChunk(ChunkPos pos, PathFindingChunk* chunk);
+	bool isChunk(ChunkPos pos);
 	void removeChunk(ChunkPos pos);
 	PathFindingBlockState getBlockState(BlockPos pos);
 	void setBlockState(BlockPos pos, PathFindingBlockState newState);

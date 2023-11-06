@@ -7,9 +7,10 @@
 #include <chrono>
 #include "time.h"
 #include "WorldRenderer.h"
+#include "DebugDefs.h"
 
-#define NUM_RUNS 30
-#define RUN_LENGTH 1000
+#define NUM_RUNS 1
+#define RUN_LENGTH 1
 
 #define CHUNK_HEIGHT 1
 #define CHUNK_WIDTH 16
@@ -36,10 +37,11 @@ PathFindingBlockState* randomData()
 }
 int main()
 {
-    srand(GetTickCount64());
+    srand((uint32)GetTickCount64());
 
     std::list<uint64> millisPerIteration = std::list<uint64>();
     uint32 iterations = 0;
+
 
     std::string a;
     std::cin >> a;
@@ -48,7 +50,12 @@ int main()
     for (uint8 runID = 0; runID < NUM_RUNS; runID++)
     {
         auto world = new PathFindingWorld();
-        auto worldLen = 100;
+
+#ifdef DEBUG_RENDERING
+        auto renderer = new WorldRenderer(world);
+#endif
+
+        auto worldLen = 1;
         for (int i = 0; i < worldLen; i++)
         {
             auto chunk = new PathFindingChunk(
@@ -72,7 +79,14 @@ int main()
         auto ts2 = std::chrono::high_resolution_clock::now();
         do
         {
-            auto path = AStar::calculatePath(nullptr, world, start, end);
+            auto path = AStar::calculatePath(
+#ifdef DEBUG_RENDERING
+                renderer,
+#endif
+#ifndef DEBUG_RENDERING
+                nullptr,
+#endif
+                world, start, end);
             delete lastPath;
             lastPath = path;
             times++;
@@ -102,4 +116,6 @@ int main()
         std::cout << millis << " ";
     }
     std::cout << std::endl << "AVG: " << (total / iterations) << std::endl << std::endl;
+
+    return 0;
 }

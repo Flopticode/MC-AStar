@@ -6,10 +6,6 @@
 #include <math.h>
 #include <string>
 
-/* in the special case of int32 the sign bit can just be cut off which
-should normally take less CPU cycles than 'a < 0' */
-#define int32abs(a) ((a & 0b01111111111111111111111111111111))
-
 _BlockPos::_BlockPos(int32 x, int32 y, int32 z)
 	:x(x), y(y), z(z)
 {
@@ -63,7 +59,7 @@ uint32 _BlockPos::manhdist(_BlockPos other)
 {
 	/* this will not cause an int32 overflow due to Minecraft worlds not being
 	large enough */
-	return int32abs(other.x - x) + int32abs(other.y - y) + int32abs(other.z - z);
+	return abs(other.x - x) + abs(other.y - y) + abs(other.z - z);
 }
 std::string _BlockPos::toString()
 {
