@@ -22,6 +22,7 @@
     <ClCompile Include="AStar.cpp" />
     <ClCompile Include="BlockPosHashList.cpp" />
     <ClCompile Include="DebugDefs.h" />
+    <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="GraphicsTypes.cpp" />
     <ClCompile Include="MCAStar.cpp" />
     <ClCompile Include="MCAStarTest.cpp" />
@@ -32,11 +33,13 @@
     <ClCompile Include="PathFindingBlockStateUtils.cpp" />
     <ClCompile Include="PathFindingChunk.cpp" />
     <ClCompile Include="PathFindingWorld.cpp" />
+    <ClCompile Include="pch.cpp" />
     <ClCompile Include="WindowDisplay.cpp" />
     <ClCompile Include="WorldRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AStar.h" />
+    <ClInclude Include="framework.h" />
     <ClInclude Include="GraphicsTypes.h" />
     <ClInclude Include="BlockPosHashList.h" />
     <ClInclude Include="MCAStar.h" />
@@ -47,6 +50,7 @@
     <ClInclude Include="PathFindingBlockStateUtils.h" />
     <ClInclude Include="PathFindingChunk.h" />
     <ClInclude Include="PathFindingWorld.h" />
+    <ClInclude Include="pch.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="WindowDisplay.h" />
     <ClInclude Include="WorldRenderer.h" />
@@ -73,7 +77,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
