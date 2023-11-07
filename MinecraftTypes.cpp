@@ -72,6 +72,10 @@ uint64 _BlockPos::hash()
 	/* still not causing an overflow due to the maximum for x, y, z being 60,000,000 */
 	return (uint64)31 * (31 * (31 + x) + y) + z;
 }
+ChunkPos _BlockPos::toChunkPos()
+{
+	return ChunkPos(x / 16, y / 16, z / 16);
+}
 
 size_t std::hash<BlockPos>::operator()(const BlockPos& obj) const
 {
@@ -79,8 +83,13 @@ size_t std::hash<BlockPos>::operator()(const BlockPos& obj) const
 	return (uint64)31 * (31 * (31 + obj.x) + obj.y) + obj.z;
 }
 
-_Dimension::_Dimension(uint64 width, uint64 height, uint64 depth)
-	:width(width), height(height), depth(depth)
+bool _ChunkPos::operator==(const _ChunkPos& other) const
+{
+	return x == other.x && y == other.y && z == other.z;
+}
+
+_Dimension::_Dimension(uint64 width, uint64 depth)
+	:width(width), depth(depth)
 {
 
 }
@@ -89,4 +98,10 @@ _ChunkPos::_ChunkPos(int32 x, int32 y, int32 z)
 	:x(x), y(y), z(z)
 {
 
+}
+
+size_t std::hash<_ChunkPos>::operator()(const _ChunkPos& obj) const
+{
+	/* don't trust intellisense, this will not cause an overflow */
+	return (uint64)31 * (31 * (31 + obj.x) + obj.y) + obj.z;
 }

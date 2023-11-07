@@ -2,6 +2,7 @@
 
 #include "PathFindingChunk.h"
 #include <vector>
+#include <unordered_map>
 
 class PathFindingWorld
 {
@@ -30,11 +31,5 @@ private:
 	-x -y +z
 	-x -y -z
 	To address one specific chunk, use the getChunkAt function.*/
-	std::vector<std::vector<PathFindingChunk*>> chunks;
-	std::vector<Dimension> reservations;
-
-	PathFindingChunk* getChunkAt(BlockPos pos);
-	uint64 chunkPosToArrayPos(uint8 dirIndex, ChunkPos pos);
-	uint8 getChunkDirectionIndex(BlockPos pos);
-	uint8 getChunkDirectionIndex(ChunkPos pos);
+	std::unordered_map<ChunkPos, PathFindingChunk*> chunks;
 };

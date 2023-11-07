@@ -6,5 +6,5 @@
 
 namespace AStar
 {
-	Path* calculatePath(WorldRenderer* wr, PathFindingWorld* world, BlockPos start, BlockPos end);
+	Path* calculatePath(uint32& closedNodes, uint32& openNodes, WorldRenderer* wr, PathFindingWorld* world, BlockPos start, BlockPos end);
 }

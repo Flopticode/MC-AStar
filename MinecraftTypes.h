@@ -4,6 +4,22 @@
 #include <math.h>
 #include <string>
 
+typedef struct _ChunkPos {
+	int32 x;
+	int32 y;
+	int32 z;
+
+	_ChunkPos(int32 x, int32 y, int32 z);
+
+	bool operator==(const _ChunkPos& other) const;
+} ChunkPos;
+namespace std {
+	template<>
+	struct hash<ChunkPos> {
+		size_t operator()(const ChunkPos& obj) const;
+	};
+}
+
 typedef struct _BlockPos {
 	int32 x;
 	int32 y;
@@ -19,6 +35,8 @@ typedef struct _BlockPos {
 	std::string toString();
 	uint64 hash();
 
+	ChunkPos toChunkPos();
+
 } BlockPos;
 namespace std {
 	template<>
@@ -29,17 +47,8 @@ namespace std {
 
 typedef struct _Dimension {
 	uint64 width;
-	uint64 height;
 	uint64 depth;
 
-	_Dimension(uint64 width, uint64 height, uint64 depth);
+	_Dimension(uint64 width, uint64 depth);
 } Dimension;
 typedef uint32 PathFindingBlockState;
-
-typedef struct _ChunkPos {
-	int32 x;
-	int32 y;
-	int32 z;
-
-	_ChunkPos(int32 x, int32 y, int32 z);
-} ChunkPos;

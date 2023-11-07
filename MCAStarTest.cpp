@@ -60,10 +60,6 @@ int main()
         {
             auto chunk = new PathFindingChunk(
                 BlockPos(0, 0, i * CHUNK_DEPTH),
-                BlockPos(
-                    CHUNK_WIDTH - 1,
-                    CHUNK_HEIGHT - 1,
-                    ((i + 1) * CHUNK_DEPTH) - 1),
                 randomData());
             world->addChunk(ChunkPos(0, 0, i), chunk);
         }
@@ -77,9 +73,12 @@ int main()
         auto startmillis = GetTickCount64();
         auto ts1 = std::chrono::high_resolution_clock::now();
         auto ts2 = std::chrono::high_resolution_clock::now();
+        
+        uint32 closedNodes;
+        uint32 openNodes;
         do
         {
-            auto path = AStar::calculatePath(
+            auto path = AStar::calculatePath(closedNodes, openNodes,
 #ifdef DEBUG_RENDERING
                 renderer,
 #endif
@@ -95,6 +94,9 @@ int main()
         duration = std::chrono::duration_cast<std::chrono::milliseconds>(ts2 - ts1);
 
         millisPerIteration.push_back(duration.count());
+
+        std::cout << "Evaluated " << closedNodes
+            << " nodes. " << openNodes << " were still open." << std::endl;
 
         std::cout << "Path finding completed in " << (duration.count() / times) << " time units." << std::endl;
         std::cout << "Operations in total: " << times << std::endl;

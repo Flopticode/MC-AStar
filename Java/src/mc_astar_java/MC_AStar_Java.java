@@ -12,7 +12,7 @@ public class MC_AStar_Java
 	{
 		try
 		{
-			loadLib("MC-AStar-V1.dll");
+			loadLib("MC-AStar-V1-1.dll");
 			System.out.println("Library loaded.");
 		}
 		catch(UnsatisfiedLinkError e)

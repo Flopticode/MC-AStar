@@ -26,7 +26,8 @@ MCAStarError calculatePath(Path*& out, BlockPos start, BlockPos end)
 		return MCAStarError::MC_ASTAR_NOT_INITIALIZED;
 	if (&out == nullptr)
 		return MCAStarError::MC_ASTAR_NULLPTR;
-	out = AStar::calculatePath(nullptr, world, start, end);
+	uint32 closed, open;
+	out = AStar::calculatePath(closed, open, nullptr, world, start, end);
 	return MCAStarError::MC_ASTAR_NO_ERROR;
 }
 
