@@ -4,6 +4,7 @@
 #include <list>
 #include <unordered_map>
 #include "MinecraftTypes.h"
+#include "BlockPosPrioMap.h"
 
 typedef struct _Node
 {
@@ -36,8 +37,7 @@ public:
 
 private:
 	std::vector<std::list<Node>> buckets;
+	BlockPosPrioMap priorities;
 
-	/* TODO implement a more efficient unordered map due to the CPU spikes to ~40us
-	without hash collisions */
-	std::unordered_map<BlockPos, uint32> priorities;
+	void insertIntoBucket(std::list<Node>& bucket, Node node, uint32 prio);
 };

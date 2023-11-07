@@ -75,6 +75,9 @@
     <ClCompile Include="JNI_cpp\mc_astar_java_MC_AStar_Java.cpp">
       <Filter>Source Files\JNI-CPP</Filter>
     </ClCompile>
+    <ClCompile Include="BlockPosPrioMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AStar.h">
@@ -127,6 +130,9 @@
     </ClInclude>
     <ClInclude Include="JNI_cpp\mc_astar_java_MC_AStar_Java.h">
       <Filter>Header Files\JNI-CPP</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockPosPrioMap.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

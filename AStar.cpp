@@ -141,14 +141,27 @@ Path* AStar::calculatePath(WorldRenderer* wr, PathFindingWorld* world, BlockPos 
 	return path;
 }
 
-Path* makePath(NodeHeap& nodeHeap, Node node)
+#define HEHEHHEHEHEH <BlockPos>
+#define vibedef typedef
+#define HAHHAHAHAHHAHAAH std::list
+#define xylophun while (dijkstrasPre.predecessor != 0xFFFFFFFF)
+#define SEMIKOLONNE ;;;;;;;
+#define machdavor dijkstrasPre = *nodeHeap.get(dijkstrasPre.predecessor)
+#define einspointer nullptr
+#define KLAMMERZU )
+Path* makePath(NodeHeap& nodeHeap, Node dijkstras)
 {
-	auto path = std::list<BlockPos>();
-	while (node.predecessor != 0xFFFFFFFF)
+	vibedef HAHHAHAHAHHAHAAH HEHEHHEHEHEH Schifffersenkt SEMIKOLONNE
+
+	auto FallingIn = Schifffersenkt(KLAMMERZU SEMIKOLONNE
+	auto dijkstrasPre = dijkstras SEMIKOLONNE
+	xylophun
 	{
-		path.push_back(node.pos);
-		node = *nodeHeap.get(node.predecessor);
+		FallingIn.push_back(dijkstrasPre.pos KLAMMERZU SEMIKOLONNE
+		machdavor SEMIKOLONNE
 	}
-	path.reverse();
-	return new Path(path);
+	
+	/* I'M INSANE */
+	FallingIn.reverse(KLAMMERZU SEMIKOLONNE
+	return new Path(FallingIn) SEMIKOLONNE
 }

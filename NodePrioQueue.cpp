@@ -18,39 +18,34 @@ _Node::_Node(uint32 id, BlockPos pos, PathFindingBlockState state, uint32 predec
 }
 
 NodePrioQueue::NodePrioQueue(size_t numBuckets)
+	:priorities(BlockPosPrioMap(numBuckets))
 {
 	if (numBuckets == 0)
 		numBuckets = 1;
-
 	clearAndSetNumBuckets(numBuckets);
 }
 
 void NodePrioQueue::addNode(Node node, uint32 priority)
 {
-	priorities[node.pos] = priority;
-	buckets[priority % buckets.size()].push_back(node);
-	buckets[priority % buckets.size()].sort([this](Node n1, Node n2) {
-		return priorities[n1.pos] < priorities[n2.pos];
-		}); // TODO this is inefficient. change this.
+	priorities.put(node.pos, priority);
+	insertIntoBucket(buckets[priority % buckets.size()], node, priority);
 }
 
 void NodePrioQueue::update(Node node, uint32 newPriority)
 {
-	uint32 oldPrio = priorities[node.pos];
+	uint32 oldPrio = priorities.get(node.pos);
 	if (oldPrio == newPriority)
 		return;
 
-	buckets[oldPrio % buckets.size()].remove(node);
-	priorities[node.pos] = newPriority;
-	buckets[newPriority % buckets.size()].push_back(node);
-	buckets[newPriority % buckets.size()].sort([this](Node n1, Node n2) {
-		return priorities[n1.pos] < priorities[n2.pos];
-		}); // TODO this is inefficient. change this.
+	auto& bucket = buckets[oldPrio % buckets.size()];
+	bucket.remove(node);
+	priorities.put(node.pos, newPriority);
+	insertIntoBucket(bucket, node, newPriority);
 }
 
 bool NodePrioQueue::contains(Node node)
 {
-	return priorities.count(node.pos) > 0;
+	return priorities.contains(node.pos);
 }
 
 Node NodePrioQueue::pop()
@@ -90,4 +85,18 @@ size_t NodePrioQueue::size()
 bool NodePrioQueue::empty()
 {
 	return size() == 0;
+}
+
+void NodePrioQueue::insertIntoBucket(std::list<Node>& bucket, Node node, uint32 prio)
+{
+	auto iter = bucket.begin();
+	while (iter != bucket.end())
+	{
+		if (priorities.get((*iter).pos) > prio)
+		{
+			bucket.insert(iter, node);
+			break;
+		}
+	}
+	bucket.push_back(node);
 }

@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="AStar.cpp" />
     <ClCompile Include="BlockPosHashList.cpp" />
+    <ClCompile Include="BlockPosPrioMap.cpp" />
     <ClCompile Include="DebugDefs.h" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="GraphicsTypes.cpp" />
@@ -41,6 +42,7 @@
   <ItemGroup>
     <ClInclude Include="AStar.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="BlockPosPrioMap.h" />
     <ClInclude Include="GraphicsTypes.h" />
     <ClInclude Include="BlockPosHashList.h" />
     <ClInclude Include="JNI_cpp\mc_astar_java_MC_AStar_Java.h" />
