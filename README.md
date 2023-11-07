@@ -1,9 +1,6 @@
 # MC-AStar
 MC-AStar makes efficient pathfinding easily achievable for any Minecraft modder. Due to a Java library, that directly connects native C++ code to any Minecraft mod, this library is easy to use while still preserving the speed of the highly optimized C++ code. The connection of the Java library to Minecraft Forge and Fabric will be simplified in the future as well to allow a comfortable installation of MC-AStar.
 
-# WIP
-This project is still WIP, no working version is available yet.
-
 # How does it work?
 The library uses the <a href="https://en.wikipedia.org/wiki/A*_search_algorithm">A* search algorithm</a> to efficiently find the fastest path from any position A to any other position B in a Minecraft world.
 
