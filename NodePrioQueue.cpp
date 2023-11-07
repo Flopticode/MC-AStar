@@ -97,6 +97,7 @@ void NodePrioQueue::insertIntoBucket(std::list<Node>& bucket, Node node, uint32 
 			bucket.insert(iter, node);
 			break;
 		}
+		iter++;
 	}
 	bucket.push_back(node);
 }
