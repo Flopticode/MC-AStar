@@ -9,10 +9,10 @@
 #include "WorldRenderer.h"
 #include "DebugDefs.h"
 
-#define NUM_RUNS 1
+#define NUM_RUNS 10
 #define RUN_LENGTH 1
 
-#define CHUNK_HEIGHT 1
+#define CHUNK_HEIGHT 16
 #define CHUNK_WIDTH 16
 #define CHUNK_DEPTH 16
 
@@ -29,7 +29,7 @@ PathFindingBlockState* randomData()
                     z * CHUNK_WIDTH * CHUNK_HEIGHT
                     + y * CHUNK_WIDTH
                     + x;
-                data[index] = PFBSUtils::createState(true, true, rand()%10 + 1, false);
+                data[index] = PFBSUtils::createState(true, true, rand() % 10 + 1, false);
             }
         }
     }
@@ -55,7 +55,7 @@ int main()
         auto renderer = new WorldRenderer(world);
 #endif
 
-        auto worldLen = 1;
+        auto worldLen = 20;
         for (int i = 0; i < worldLen; i++)
         {
             auto chunk = new PathFindingChunk(

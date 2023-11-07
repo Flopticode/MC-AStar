@@ -10,19 +10,18 @@
 #include <unordered_set>
 #include "DebugDefs.h"
 
-Path* makePath(Node* node);
+Path* makePath(NodeHeap& nodeHeap, Node node);
 
 uint32 getCost(PathFindingBlockState state)
 {
-	return
-		PFBSUtils::getBreakDelay(state);
+	return PFBSUtils::getBreakDelay(state);
 }
 
-void expandNode(NodeHeap& nodeHeap, WorldRenderer* wr, uint32& idCntr, BlockPos start, BlockPos end,
+void expandNode(NodeHeap& nodeHeap, WorldRenderer* wr, BlockPos start, BlockPos end,
 	PathFindingWorld* world,
-	NodePrioQueue& openlist, std::unordered_set<BlockPos>& closedlist, Node* currentNode)
+	NodePrioQueue& openlist, std::unordered_set<BlockPos>& closedlist, Node currentNode)
 {
-	BlockPos curPos = currentNode->pos;
+	BlockPos curPos = currentNode.pos;
 	
 	// TODO feels inefficient to always test all the neighbors.
 	// is there a more efficient way?
@@ -41,32 +40,34 @@ void expandNode(NodeHeap& nodeHeap, WorldRenderer* wr, uint32& idCntr, BlockPos 
 
 		if (closedlist.count(successorPos) > 0)
 			continue;
-		
-		auto successor = nodeHeap.newNode(idCntr++,
+
+		auto successor = nodeHeap.newNode(
 			successorPos,
 			world->getBlockState(successorPos),
-			nullptr,
+			currentNode.id,
 			(uint32)start.dist(successorPos));
 
-		if (PFBSUtils::isInvalid(successor->state))
+		Node* successorPtr = nodeHeap.get(successor);
+
+		if (PFBSUtils::isInvalid(successorPtr->state))
 			continue;
 
-		auto cost = getCost(successor->state);
-		auto tentative_g = currentNode->gCost + cost;
+		auto cost = getCost(nodeHeap.get(successor)->state);
+		auto tentative_g = currentNode.gCost + cost;
 
-		bool openlistContainsSuccessor = openlist.contains(successor);
-		if (openlistContainsSuccessor && tentative_g >= successor->gCost)
+		bool openlistContainsSuccessor = openlist.contains(*successorPtr);
+		if (openlistContainsSuccessor && tentative_g >= successorPtr->gCost)
 			continue;
 
-		successor->predecessor = currentNode;
-		successor->gCost = tentative_g;
-		uint32 hCost = successor->pos.manhdist(end);
+		successorPtr->predecessor = currentNode.id;
+		successorPtr->gCost = tentative_g;
+		uint32 hCost = successorPtr->pos.manhdist(end);
 		uint32 fCost = (uint32)(tentative_g + hCost);
 
 		if (openlistContainsSuccessor)
-			openlist.update(successor, fCost);
+			openlist.update(*successorPtr, fCost);
 		else
-			openlist.addNode(successor, fCost);
+			openlist.addNode(*successorPtr, fCost);
 
 #ifdef DEBUG_RENDERING
 		/* Just for debugging */
@@ -84,17 +85,17 @@ void expandNode(NodeHeap& nodeHeap, WorldRenderer* wr, uint32& idCntr, BlockPos 
 Path* AStar::calculatePath(WorldRenderer* wr, PathFindingWorld* world, BlockPos start, BlockPos end)
 {
 	/* The higher, the faster, but your memory gets eaten */
-	auto initialSize = end.dist(start) * 80;
+	auto initialSize = end.dist(start) * 100;
 	NodeHeap nodeHeap = NodeHeap(initialSize);
 	auto openlist = NodePrioQueue(initialSize);
 	auto closedlist = std::unordered_set<BlockPos>();
 
 	uint32 idCntr = 0;
 
-	openlist.addNode(nodeHeap.newNode(idCntr++, start, world->getBlockState(start), nullptr, 0), 0);
+	uint32 nodeID = nodeHeap.newNode(start, world->getBlockState(start), 0xFFFFFFFF, 0);
+	openlist.addNode(*nodeHeap.get(nodeID), 0);
 
 	Path* path = nullptr;
-
 	do
 	{
 		auto curNode = openlist.pop();
@@ -109,18 +110,15 @@ Path* AStar::calculatePath(WorldRenderer* wr, PathFindingWorld* world, BlockPos 
 		int a = 0;
 		/* ==== */
 #endif
-
 		
-		if (curNode->pos == end)
+		if (curNode.pos == end)
 		{
-			//std::cout << closedlist.size() << " nodes were evaluated, " << openlist.size() << " were open." << std::endl;
-			path = makePath(curNode);
+			path = makePath(nodeHeap, curNode);
 			break;
 		}
 
-		closedlist.insert(curNode->pos);
-
-		expandNode(nodeHeap, wr, idCntr, start, end, world, openlist, closedlist, curNode);
+		closedlist.insert(curNode.pos);
+		expandNode(nodeHeap, wr, start, end, world, openlist, closedlist, curNode);
 #ifdef DEBUG_RENDERING
 		/* Just for debugging */
 		stateBefore = world->getBlockState(curNode->pos);
@@ -143,13 +141,13 @@ Path* AStar::calculatePath(WorldRenderer* wr, PathFindingWorld* world, BlockPos 
 	return path;
 }
 
-Path* makePath(Node* node)
+Path* makePath(NodeHeap& nodeHeap, Node node)
 {
 	auto path = std::list<BlockPos>();
-	while (node->predecessor != nullptr)
+	while (node.predecessor != 0xFFFFFFFF)
 	{
-		path.push_back(node->pos);
-		node = node->predecessor;
+		path.push_back(node.pos);
+		node = *nodeHeap.get(node.predecessor);
 	}
 	path.reverse();
 	return new Path(path);

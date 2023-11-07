@@ -1,6 +1,6 @@
-#include "pch.h"
+#include "../pch.h"
 #include "mc_astar_java_MC_AStar_Java.h"
-#include "MCAStar.h"
+#include "../MCAStar.h"
 #include <iostream>
 
 JNIEXPORT jintArray JNICALL Java_mc_1astar_1java_MC_1AStar_1Java_findPath
@@ -10,7 +10,10 @@ JNIEXPORT jintArray JNICALL Java_mc_1astar_1java_MC_1AStar_1Java_findPath
 	auto err = calculatePath(path, BlockPos(sX, sY, sZ), BlockPos(eX, eY, eZ));
 
 	if (err != MC_ASTAR_NO_ERROR)
+	{
+		std::cout << "Pathfinding error " << err << std::endl;
 		return nullptr;
+	}
 
 	if (path == nullptr)
 		return nullptr;
@@ -96,13 +99,11 @@ JNIEXPORT jobject JNICALL Java_mc_1astar_1java_MC_1AStar_1Java_addChunk
 		return getErrorObject(env, MCAStarError::MC_ASTAR_NULLPTR);
 
 	auto chunkDataLL = new jlong[16 * 16 * 16];
-	env->GetLongArrayRegion(jniData, 0, 16 * 16 * 16, (jlong*)chunkDataLL);
-
 	if (chunkDataLL == nullptr)
 		return getErrorObject(env, MCAStarError::MC_ASTAR_ALLOCATION_FAILED);
+	env->GetLongArrayRegion(jniData, 0, 16 * 16 * 16, (jlong*)chunkDataLL);
 
 	auto chunkData = new PathFindingBlockState[16 * 16 * 16];
-
 	if (chunkData == nullptr)
 		return getErrorObject(env, MCAStarError::MC_ASTAR_ALLOCATION_FAILED);
 
@@ -111,7 +112,7 @@ JNIEXPORT jobject JNICALL Java_mc_1astar_1java_MC_1AStar_1Java_addChunk
 			for (uint8 cdz = 0; cdz < 16; cdz++)
 			{
 				auto index = cdz * 16 * 16 + cdy * 16 + cdx;
-				chunkData[index] = (PathFindingBlockState)chunkDataLL;
+				chunkData[index] = (PathFindingBlockState)chunkDataLL[index];
 			}
 
 	delete[] chunkDataLL;

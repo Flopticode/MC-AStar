@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\JNI-CPP">
+      <UniqueIdentifier>{dcd1bda2-09c9-42fc-b5d3-430f672750c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\JNI-CPP">
+      <UniqueIdentifier>{3f309d6b-583a-4ef3-8d0f-ac384bf43b45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AStar.cpp">
@@ -66,6 +72,9 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="JNI_cpp\mc_astar_java_MC_AStar_Java.cpp">
+      <Filter>Source Files\JNI-CPP</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AStar.h">
@@ -115,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JNI_cpp\mc_astar_java_MC_AStar_Java.h">
+      <Filter>Header Files\JNI-CPP</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -16,9 +16,11 @@ public class PathFindingTest
 			for(int y = 0; y < 16; y++)
 				for(int z = 0; z < 16; z++)
 				{
+					int breakDelay = ((rand.nextInt() % 10) + 1) & 0xFF;
+					
 					int index = z * 16 * 16 + y * 16 + x; 
 					data[index] = (1 << 0) /* walk on */
-							| (((rand.nextInt() % 10) + 1) << 1) /* break delay */
+							| (breakDelay << 1) /* break delay */
 							| (1 << 9) /* walk through */
 							| (0 << 10); /* invalid */
 				}
@@ -29,7 +31,7 @@ public class PathFindingTest
 	{
 		var lib = new MC_AStar_Java();
 		
-		for(int i = 0; i < 9; i++)
+		for(int i = 0; i < 32; i++)
 		{
 			var error = lib.addChunk(i, 0, 0, generateRandomData());
 			if(error != MCAStarError.MC_ASTAR_NO_ERROR)
@@ -45,11 +47,11 @@ public class PathFindingTest
 		
 		int[] path = null;
 		long ts1 = System.currentTimeMillis();
-		for(int x = 0; x < 10; x++)
+		for(int x = 0; x < 3; x++)
 		{
 			if(x % 1 == 0)
 				System.out.println(x);
-			path = lib.findPath(0, 0, 0, 50, 1, 2);
+			path = lib.findPath(0, 0, 0, 510, 1, 2);
 		}
 		long ts2 = System.currentTimeMillis();
 		System.out.println("The process took " + (ts2-ts1) + " millis.");
