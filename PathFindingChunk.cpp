@@ -34,11 +34,10 @@ void PathFindingChunk::setBlockState(BlockPos pos, PathFindingBlockState state)
 	data[blockPosToArrayIndex(pos)] = state;
 }
 
-PathFindingChunk::PathFindingChunk(BlockPos start, BlockPos end, PathFindingBlockState* data)
+PathFindingChunk::PathFindingChunk(BlockPos start, PathFindingBlockState* data)
 	:data(data),
-	start(BlockPos(min(start.x, end.x), min(start.y, end.y), min(start.z, end.z))),
-	end(BlockPos(max(start.x, end.x), max(start.y, end.y), max(start.z, end.z))),
-	size(Dimension(end.x - start.x + 1, end.y - start.y + 1, end.z - start.z + 1))
+	start(start),
+	end(start.x + 15, start.y + 15, start.z + 15)
 {
 
 }
@@ -59,10 +58,5 @@ uint64 PathFindingChunk::blockPosToArrayIndex(BlockPos pos)
 	}
 
 	BlockPos relative = BlockPos(pos.x - start.x, pos.y - start.y, pos.z - start.z);
-	return relative.z * (size.width * size.height) + relative.y * (size.width) + relative.x;
-}
-
-Dimension PathFindingChunk::getSize()
-{
-	return size;
+	return relative.z * 16 * 16 + relative.y * 16 + relative.x;
 }

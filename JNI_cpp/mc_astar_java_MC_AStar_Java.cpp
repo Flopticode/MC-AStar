@@ -119,7 +119,6 @@ JNIEXPORT jobject JNICALL Java_mc_1astar_1java_MC_1AStar_1Java_addChunk
 
 	auto chunk = new PathFindingChunk(
 		BlockPos(x * 16, y * 16, z * 16),
-		BlockPos((x + 1) * 16 - 1, (y + 1) * 16 - 1, (z + 1) * 16 - 1),
 		chunkData);
 
 	if (chunk == nullptr)

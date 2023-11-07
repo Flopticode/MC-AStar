@@ -11,15 +11,13 @@ public:
 	PathFindingBlockState getBlockState(BlockPos pos);
 	void setBlockState(BlockPos pos, PathFindingBlockState state);
 
-	PathFindingChunk(BlockPos start, BlockPos end, PathFindingBlockState* data);
+	PathFindingChunk(BlockPos start, PathFindingBlockState* data);
 	~PathFindingChunk();
 
 private:
 	BlockPos start;
 	BlockPos end;
-	Dimension size;
 	PathFindingBlockState* data;
 
 	uint64 blockPosToArrayIndex(BlockPos pos);
-	Dimension getSize();
 };

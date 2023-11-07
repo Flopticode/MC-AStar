@@ -82,7 +82,7 @@ void expandNode(NodeHeap& nodeHeap, WorldRenderer* wr, BlockPos start, BlockPos 
 	}
 }
 
-Path* AStar::calculatePath(WorldRenderer* wr, PathFindingWorld* world, BlockPos start, BlockPos end)
+Path* AStar::calculatePath(uint32& closedNodes, uint32& openNodes, WorldRenderer* wr, PathFindingWorld* world, BlockPos start, BlockPos end)
 {
 	/* The higher, the faster, but your memory gets eaten */
 	auto initialSize = end.dist(start) * 100;
@@ -113,6 +113,8 @@ Path* AStar::calculatePath(WorldRenderer* wr, PathFindingWorld* world, BlockPos 
 		
 		if (curNode.pos == end)
 		{
+			closedNodes = closedlist.size();
+			openNodes = openlist.size();
 			path = makePath(nodeHeap, curNode);
 			break;
 		}
