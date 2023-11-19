@@ -1,13 +1,11 @@
 #include <iostream>
-#include "PathFindingWorld.h"
-#include "AStar.h"
 #include "PathFindingBlockStateUtils.h"
 #include "NodePrioQueue.h"
 #include <Windows.h>
 #include <chrono>
 #include "time.h"
-#include "WorldRenderer.h"
 #include "DebugDefs.h"
+#include "Path.h"
 
 #define NUM_RUNS 10
 #define RUN_LENGTH 1
@@ -37,6 +35,7 @@ PathFindingBlockState* randomData()
 }
 int main()
 {
+    std::cout << sizeof(Node) << std::endl;
     srand((uint32)GetTickCount64());
 
     std::list<uint64> millisPerIteration = std::list<uint64>();
@@ -49,19 +48,11 @@ int main()
 
     for (uint8 runID = 0; runID < NUM_RUNS; runID++)
     {
-        auto world = new PathFindingWorld();
-
-#ifdef DEBUG_RENDERING
-        auto renderer = new WorldRenderer(world);
-#endif
-
+        auto world = new Graph();
         auto worldLen = 20;
         for (int i = 0; i < worldLen; i++)
         {
-            auto chunk = new PathFindingChunk(
-                BlockPos(0, 0, i * CHUNK_DEPTH),
-                randomData());
-            world->addChunk(ChunkPos(0, 0, i), chunk);
+            world->addChunk(ChunkPos(0, 0, i), randomData());
         }
 
         std::chrono::milliseconds duration;
@@ -74,18 +65,10 @@ int main()
         auto ts1 = std::chrono::high_resolution_clock::now();
         auto ts2 = std::chrono::high_resolution_clock::now();
         
-        uint32 closedNodes;
-        uint32 openNodes;
         do
         {
-            auto path = AStar::calculatePath(closedNodes, openNodes,
-#ifdef DEBUG_RENDERING
-                renderer,
-#endif
-#ifndef DEBUG_RENDERING
-                nullptr,
-#endif
-                world, start, end);
+            auto path = world->findPath(world->getNodeAt(start), world->getNodeAt(end), 1);
+
             delete lastPath;
             lastPath = path;
             times++;
@@ -94,9 +77,6 @@ int main()
         duration = std::chrono::duration_cast<std::chrono::milliseconds>(ts2 - ts1);
 
         millisPerIteration.push_back(duration.count());
-
-        std::cout << "Evaluated " << closedNodes
-            << " nodes. " << openNodes << " were still open." << std::endl;
 
         std::cout << "Path finding completed in " << (duration.count() / times) << " time units." << std::endl;
         std::cout << "Operations in total: " << times << std::endl;

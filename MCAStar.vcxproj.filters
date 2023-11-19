@@ -21,9 +21,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AStar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MCAStarTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -33,28 +30,13 @@
     <ClCompile Include="PathFindingBlockStateUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PathFindingChunk.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PathFindingWorld.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WorldRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GraphicsTypes.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowDisplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BlockPosHashList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MinecraftTypes.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NodeHeap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NodePrioQueue.cpp">
@@ -78,11 +60,11 @@
     <ClCompile Include="BlockPosPrioMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Graph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AStar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MinecraftTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -92,28 +74,13 @@
     <ClInclude Include="PathFindingBlockStateUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PathFindingChunk.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PathFindingWorld.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GraphicsTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WindowDisplay.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BlockPosHashList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NodeHeap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="NodePrioQueue.h">
@@ -132,6 +99,12 @@
       <Filter>Header Files\JNI-CPP</Filter>
     </ClInclude>
     <ClInclude Include="BlockPosPrioMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

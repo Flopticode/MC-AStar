@@ -1,22 +1,5 @@
 #include "NodePrioQueue.h"
 
-bool _Node::operator==(const _Node& other) const
-{
-	return other.pos == pos;
-}
-
-_Node::_Node()
-	:id(0), predecessor(0xFFFFFFFF), pos(), state(0), gCost(0)
-{
-
-}
-
-_Node::_Node(uint32 id, BlockPos pos, PathFindingBlockState state, uint32 predecessor, uint32 gCost)
-	:id(id), pos(pos), state(state), predecessor(predecessor), gCost(gCost)
-{
-
-}
-
 NodePrioQueue::NodePrioQueue(size_t numBuckets)
 	:priorities(BlockPosPrioMap(numBuckets))
 {
@@ -25,30 +8,30 @@ NodePrioQueue::NodePrioQueue(size_t numBuckets)
 	clearAndSetNumBuckets(numBuckets);
 }
 
-void NodePrioQueue::addNode(Node node, uint32 priority)
+void NodePrioQueue::addNode(Node* node, uint32 priority)
 {
-	priorities.put(node.pos, priority);
+	priorities.put(node->getPos(), priority);
 	insertIntoBucket(buckets[priority % buckets.size()], node, priority);
 }
 
-void NodePrioQueue::update(Node node, uint32 newPriority)
+void NodePrioQueue::update(Node* node, uint32 newPriority)
 {
-	uint32 oldPrio = priorities.get(node.pos);
+	uint32 oldPrio = priorities.get(node->getPos());
 	if (oldPrio == newPriority)
 		return;
 
 	auto& bucket = buckets[oldPrio % buckets.size()];
 	bucket.remove(node);
-	priorities.put(node.pos, newPriority);
+	priorities.put(node->getPos(), newPriority);
 	insertIntoBucket(bucket, node, newPriority);
 }
 
-bool NodePrioQueue::contains(Node node)
+bool NodePrioQueue::contains(Node* node)
 {
-	return priorities.contains(node.pos);
+	return priorities.contains(node->getPos());
 }
 
-Node NodePrioQueue::pop()
+Node* NodePrioQueue::pop()
 {
 	for (auto& bucket : buckets)
 	{
@@ -56,11 +39,11 @@ Node NodePrioQueue::pop()
 		{
 			auto ret = bucket.front();
 			bucket.pop_front();
-			priorities.erase(ret.pos);
+			priorities.erase(ret->getPos());
 			return ret;
 		}
 	}
-	return Node(0xFFFFFFFF, BlockPos(), 0, 0xFFFFFFFF, 0);
+	return nullptr;
 }
 void NodePrioQueue::clearAndSetNumBuckets(size_t num)
 {
@@ -87,12 +70,12 @@ bool NodePrioQueue::empty()
 	return size() == 0;
 }
 
-void NodePrioQueue::insertIntoBucket(std::list<Node>& bucket, Node node, uint32 prio)
+void NodePrioQueue::insertIntoBucket(std::list<Node*>& bucket, Node* node, uint32 prio)
 {
 	auto iter = bucket.begin();
 	while (iter != bucket.end())
 	{
-		if (priorities.get((*iter).pos) > prio)
+		if (priorities.get((*iter)->getPos()) > prio)
 		{
 			bucket.insert(iter, node);
 			break;

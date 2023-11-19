@@ -19,45 +19,36 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AStar.cpp" />
     <ClCompile Include="BlockPosHashList.cpp" />
     <ClCompile Include="BlockPosPrioMap.cpp" />
     <ClCompile Include="DebugDefs.h" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Graph.cpp" />
     <ClCompile Include="GraphicsTypes.cpp" />
     <ClCompile Include="JNI_cpp\mc_astar_java_MC_AStar_Java.cpp" />
     <ClCompile Include="MCAStar.cpp" />
     <ClCompile Include="MCAStarTest.cpp" />
     <ClCompile Include="MinecraftTypes.cpp" />
-    <ClCompile Include="NodeHeap.cpp" />
     <ClCompile Include="NodePrioQueue.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="PathFindingBlockStateUtils.cpp" />
-    <ClCompile Include="PathFindingChunk.cpp" />
-    <ClCompile Include="PathFindingWorld.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="WindowDisplay.cpp" />
-    <ClCompile Include="WorldRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AStar.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="BlockPosPrioMap.h" />
+    <ClInclude Include="Graph.h" />
     <ClInclude Include="GraphicsTypes.h" />
     <ClInclude Include="BlockPosHashList.h" />
     <ClInclude Include="JNI_cpp\mc_astar_java_MC_AStar_Java.h" />
     <ClInclude Include="MCAStar.h" />
-    <ClInclude Include="NodeHeap.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="NodePrioQueue.h" />
     <ClInclude Include="MinecraftTypes.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="PathFindingBlockStateUtils.h" />
-    <ClInclude Include="PathFindingChunk.h" />
-    <ClInclude Include="PathFindingWorld.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="types.h" />
-    <ClInclude Include="WindowDisplay.h" />
-    <ClInclude Include="WorldRenderer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -81,7 +72,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>

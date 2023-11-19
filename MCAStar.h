@@ -1,8 +1,7 @@
 #pragma once
 
 #include "MinecraftTypes.h"
-#include "PathFindingWorld.h"
-#include "AStar.h"
+#include "Path.h"
 
 typedef enum {
 	MC_ASTAR_NO_ERROR = 0,
@@ -16,5 +15,5 @@ typedef enum {
 
 MCAStarError init();
 MCAStarError calculatePath(Path*& out, BlockPos start, BlockPos end);
-MCAStarError addChunk(ChunkPos pos, PathFindingChunk* chunk);
+MCAStarError addChunk(ChunkPos pos, PathFindingBlockState* chunk);
 MCAStarError setBlock(BlockPos pos, PathFindingBlockState state);

@@ -2,6 +2,7 @@
 #include "mc_astar_java_MC_AStar_Java.h"
 #include "../MCAStar.h"
 #include <iostream>
+#include "../MinecraftTypes.h"
 
 JNIEXPORT jintArray JNICALL Java_mc_1astar_1java_MC_1AStar_1Java_findPath
 (JNIEnv* env, jobject obj, jint sX, jint sY, jint sZ, jint eX, jint eY, jint eZ)
@@ -18,20 +19,22 @@ JNIEXPORT jintArray JNICALL Java_mc_1astar_1java_MC_1AStar_1Java_findPath
 	if (path == nullptr)
 		return nullptr;
 
-	size_t len = path->get().size() * 3;
-	jintArray arr = env->NewIntArray(len);
+	auto pathList = path->get();
+	size_t len = pathList.size() * 3;
+	jintArray arr = env->NewIntArray((jsize)len);
 	
 	long* longArr = new long[len];
-	uint32 i = 0;
-	for (auto& pos : path->get())
+	auto iter = pathList.begin();
+	
+	for(uint32 i = 0; iter != pathList.end(); i += 3)
 	{
+		BlockPos pos = (*iter)->getPos();
 		longArr[i] = pos.x;
 		longArr[i + 1] = pos.y;
 		longArr[i + 2] = pos.z;
-		i += 3;
 	}
 
-	env->SetIntArrayRegion(arr, 0, len, longArr);
+	env->SetIntArrayRegion(arr, (jsize)0, (jsize)len, longArr);
 	delete[] longArr;
 	return arr;
 }
@@ -117,13 +120,7 @@ JNIEXPORT jobject JNICALL Java_mc_1astar_1java_MC_1AStar_1Java_addChunk
 
 	delete[] chunkDataLL;
 
-	auto chunk = new PathFindingChunk(
-		BlockPos(x * 16, y * 16, z * 16),
-		chunkData);
-
-	if (chunk == nullptr)
-		return getErrorObject(env, MCAStarError::MC_ASTAR_ALLOCATION_FAILED);
-	return getErrorObject(env, addChunk(ChunkPos(x, y, z), chunk));
+	return getErrorObject(env, addChunk(ChunkPos(x, y, z), chunkData));
 }
 
 JNIEXPORT jobject JNICALL Java_mc_1astar_1java_MC_1AStar_1Java_setBlock
