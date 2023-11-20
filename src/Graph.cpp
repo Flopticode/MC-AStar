@@ -1,5 +1,6 @@
 #include "Graph.h"
 #include "NodePrioQueue.h"
+#include "PathFindingBlockStateUtils.h"
 
 Node::Node(BlockPos pos, uint16 abstractionLevel, uint32 parent, std::unordered_set<uint32> subNodes, Edges edges, PathFindingBlockState state)
 	:abstractionLevel(abstractionLevel),
@@ -294,5 +295,8 @@ void Graph::setBlockState(BlockPos pos, PathFindingBlockState state)
 		BlockPos(pos.x, pos.y, pos.z - 1),
 		BlockPos(pos.x, pos.y, pos.z + 1),
 	};
-	// TODO
+	for (BlockPos neighborPos : neighborsPos)
+	{
+
+	}
 }
